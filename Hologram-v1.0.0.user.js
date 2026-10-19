@@ -1648,6 +1648,12 @@
     if (!(element instanceof Element)) return;
     const saved = textureNodes.get(element);
     const source = saved?.src ?? element.getAttribute('src');
+    const isLogoSource = source && /(?:^|\/)logo\d*\.(?:svg|png|webp|jpe?g|avif)(?:$|[?#])/i.test(source);
+    if (isLogoSource && element.id !== 'mainMenuLogo') {
+      const primaryLogo = [...document.querySelectorAll('#gameWrapper img, #gameWrapper #mainMenuLogo')]
+        .find(node => (node.id === 'mainMenuLogo') || /(?:^|\/)logo\d*\.(?:svg|png|webp|jpe?g|avif)(?:$|[?#])/i.test(node.getAttribute('src') || ''));
+      if (primaryLogo && primaryLogo !== element) return;
+    }
     if (activeTexturePack?.builtin && !activeTexturePack.textures.some(texture => texture.target === 'logo.svg') &&
         source && /(?:^|\/)logo\d*\.(?:svg|png|webp|jpe?g|avif)(?:$|[?#])/i.test(source)) {
       const paletteFilter = activeTexturePack.builtin === 'pulsar'
